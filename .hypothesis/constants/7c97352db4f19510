@@ -1,0 +1,4 @@
+# file: /Users/guneycansanli/Development/kiro-spec-demo/weather.py
+# hypothesis_version: 6.148.7
+
+[' mph', '(\\d+)%', '.weather_cli_cache', '07610', 'Humidity', 'Unknown', 'User-Agent', 'Wind', '__main__', 'advisory', 'div', 'html.parser', 'humidity[:\\s]*(\\d+)%', 'myforecast-current', 'p', 'warning', 'watch', '°', '°F']

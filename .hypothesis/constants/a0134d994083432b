@@ -1,0 +1,4 @@
+# file: /Users/guneycansanli/Development/kiro-spec-demo/weather.py
+# hypothesis_version: 6.148.7
+
+['.weather_cli_cache', '07610', '__main__', 'advisory', 'warning', 'watch']
