@@ -1,0 +1,67 @@
+# Docker Compose Configuration for Weather Web Service
+# This file defines the multi-container application with Nginx and Flask
+# Validates: Requirements 8.1, 8.2, 8.3, 8.4, 8.5
+
+version: '3.8'
+
+services:
+  # Nginx Service
+  # Provides HTTPS termination and reverse proxy to Flask application
+  # Validates: Requirements 1.4, 8.3
+  nginx:
+    image: nginx:alpine  # Lightweight Alpine-based Nginx image
+    ports:
+      # Expose HTTP port (redirects to HTTPS)
+      - "80:80"
+      # Expose HTTPS port (main application access)
+      - "443:443"
+    volumes:
+      # Mount Nginx configuration (read-only)
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      # Mount SSL certificates (read-only)
+      # Generate these with: openssl req -x509 -newkey rsa:4096 -nodes -out ssl/cert.pem -keyout ssl/key.pem -days 365
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      # Ensure Flask app starts before Nginx
+      - flask-app
+    restart: unless-stopped  # Automatically restart on failure
+
+  # Flask Application Service
+  # Main weather web service application
+  # Validates: Requirements 8.1, 8.3, 8.4, 8.5
+  flask-app:
+    build: .  # Build from Dockerfile in current directory
+    environment:
+      # Flask Environment Configuration
+      # Set to 'production' for production deployments
+      - FLASK_ENV=production
+      
+      # Logging Configuration
+      # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+      - LOG_LEVEL=INFO
+      
+      # Security Configuration
+      # SECRET_KEY: Used for session encryption and security
+      # IMPORTANT: Generate a secure key for production using:
+      # python -c "import secrets; print(secrets.token_hex(32))"
+      # Set via environment variable or .env file
+      - SECRET_KEY=${SECRET_KEY:-dev-secret-key}
+      
+      # Cache Configuration
+      # CACHE_TTL: Time-to-live for cached data in seconds (default: 5 minutes)
+      - CACHE_TTL=${CACHE_TTL:-300}
+      
+      # Request Configuration
+      # REQUEST_TIMEOUT: HTTP request timeout in seconds
+      - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-10}
+      
+      # CORS Configuration
+      # CORS_ORIGINS: Allowed origins for cross-origin requests
+      # Use '*' for development, restrict to specific domains in production
+      # Example: https://yourdomain.com,https://www.yourdomain.com
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
+    expose:
+      # Expose port 5000 internally (not published to host)
+      # Nginx will proxy requests to this port
+      - "5000"
+    restart: unless-stopped  # Automatically restart on failure
