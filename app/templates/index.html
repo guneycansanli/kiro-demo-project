@@ -119,6 +119,34 @@
 
                     <div class="w-full" style="height: 20px;"></div>
 
+                    <!-- Default Welcome State -->
+                    <div id="welcome-state" class="text-center py-16">
+                        <div class="max-w-md mx-auto">
+                            <div class="mb-6">
+                                <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-medium text-gray-900 mb-2">Welcome to Weather App</h3>
+                            <p class="text-gray-600 mb-6">Search for a location or use your current location to get started</p>
+                            <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                    Search by city, zip code, or country
+                                </div>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    Use current location
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Weather Display -->
                     <div id="weather-display" class="hidden">
                         <!-- Location Header -->
@@ -130,8 +158,7 @@
                             <div id="weather-background" class="w-full gap-1 overflow-hidden bg-white @[480px]:gap-2 aspect-[3/2] rounded-lg flex">
                                 <div
                                     id="weather-image"
-                                    class="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none flex-1"
-                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDmElNzdfzha9-u5B7plnFikM9co2ukEl39Hqrh3h6IfQACMY5h9WGXPsLGe5WI8mpgqFt-XWx2NIdDPt2fH8yps5mdcHUig9_pcfBANzwyncH-ySLOq_PG6uMMJlsQYxKdbe9uKfuO4agAOQTxjadUnG9C7XW0Cfb4rqWDbv7Onjr-Wjxngwz5pm8lc--58wL1zBFUXv9p15L41mL6nayb0RT_2m53nghqQk6n0k9yGWCDUCq497zZ2_spHFDE0Nf2tx7womNI0Ws");'
+                                    class="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none flex-1 bg-gray-100"
                                 ></div>
                             </div>
                         </div>
@@ -202,12 +229,11 @@
 
                     <!-- Loading Display -->
                     <div id="loading-display" class="hidden p-4 text-center">
-                        <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-gray-500 bg-white transition ease-in-out duration-150">
-                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <div class="inline-flex items-center justify-center">
+                            <svg class="animate-spin h-8 w-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            Loading weather data...
                         </div>
                     </div>
 
@@ -320,12 +346,11 @@
                             
                             <!-- Loading state for news -->
                             <div id="news-loading" class="hidden text-center p-8">
-                                <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-gray-500 bg-white transition ease-in-out duration-150">
-                                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <div class="inline-flex items-center justify-center">
+                                    <svg class="animate-spin h-8 w-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    Loading weather news...
                                 </div>
                             </div>
                         </div>

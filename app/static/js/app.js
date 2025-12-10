@@ -434,6 +434,7 @@ class WeatherDisplay {
     showLoading() {
         this.hideError();
         this.hideWeather();
+        this.hideWelcomeState();
         this.loadingContainer.classList.remove('hidden');
     }
     
@@ -451,6 +452,7 @@ class WeatherDisplay {
     showWeather(data) {
         this.hideError();
         this.hideLoading();
+        this.hideWelcomeState();
         
         const weather = data.weather;
         const location = data.location;
@@ -559,6 +561,26 @@ class WeatherDisplay {
     }
     
     /**
+     * Hide welcome state
+     */
+    hideWelcomeState() {
+        const welcomeState = document.getElementById('welcome-state');
+        if (welcomeState) {
+            welcomeState.classList.add('hidden');
+        }
+    }
+    
+    /**
+     * Show welcome state
+     */
+    showWelcomeState() {
+        const welcomeState = document.getElementById('welcome-state');
+        if (welcomeState) {
+            welcomeState.classList.remove('hidden');
+        }
+    }
+    
+    /**
      * Show advisory information
      * @param {Object} advisory - Advisory object
      */
@@ -638,6 +660,7 @@ class WeatherDisplay {
     showError(message, retryCallback = null) {
         this.hideWeather();
         this.hideLoading();
+        this.hideWelcomeState();
         
         this.errorMessage.textContent = message;
         
@@ -759,16 +782,21 @@ class TabManager {
         const newsContent = document.getElementById('news-content');
         const errorDisplay = document.getElementById('error-display');
         const loadingDisplay = document.getElementById('loading-display');
+        const welcomeState = document.getElementById('welcome-state');
         
         // Hide all sections first
-        [weatherDisplay, forecastContent, mapsContent, newsContent, errorDisplay, loadingDisplay].forEach(element => {
+        [weatherDisplay, forecastContent, mapsContent, newsContent, errorDisplay, loadingDisplay, welcomeState].forEach(element => {
             if (element) element.classList.add('hidden');
         });
         
         // Show the appropriate content
         switch (tabName) {
             case 'today':
-                if (weatherDisplay) weatherDisplay.classList.remove('hidden');
+                if (this.currentLocation) {
+                    if (weatherDisplay) weatherDisplay.classList.remove('hidden');
+                } else {
+                    if (welcomeState) welcomeState.classList.remove('hidden');
+                }
                 break;
             case 'forecast':
                 if (forecastContent) forecastContent.classList.remove('hidden');

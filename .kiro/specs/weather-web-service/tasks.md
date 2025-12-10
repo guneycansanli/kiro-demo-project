@@ -386,7 +386,14 @@
   - Focus appropriate search input
   - _Requirements: 1.1, 1.3_
 
-- [ ] 11.10 Update frontend unit tests
+- [x] 11.10 Clean up default page state
+  - Remove default weather background image from page load
+  - Replace loading text with minimal loading icon
+  - Add clean welcome state for first-time users
+  - Only show weather content after search or location use
+  - _Requirements: 1.1, 5.1, 5.4_
+
+- [ ] 11.11 Update frontend unit tests
   - Update tests for new DOM structure
   - Test new styling and layout
   - Ensure all functionality works with new design
