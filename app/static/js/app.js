@@ -177,13 +177,27 @@ class SearchInterface {
             return;
         }
         
-        // Build suggestions HTML with Tailwind styling
-        const html = suggestions.map((suggestion, index) => `
-            <div class="suggestion-item cursor-pointer px-4 py-2 hover:bg-gray-100 border-b border-gray-100 last:border-b-0" data-index="${index}">
-                <div class="text-sm font-medium text-gray-900">${this.escapeHtml(suggestion.display_name)}</div>
-                <div class="text-xs text-gray-500 capitalize">${this.escapeHtml(suggestion.type)}</div>
-            </div>
-        `).join('');
+        // Build suggestions HTML with enhanced styling and icons
+        const html = suggestions.map((suggestion, index) => {
+            const icon = this.getLocationIcon(suggestion.type);
+            const typeLabel = this.getTypeLabel(suggestion.type);
+            
+            return `
+                <div class="suggestion-item cursor-pointer px-4 py-3 hover:bg-gray-100 border-b border-gray-100 last:border-b-0 flex items-center space-x-3" data-index="${index}">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                ${icon}
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-medium text-gray-900 truncate">${this.escapeHtml(suggestion.display_name)}</div>
+                        <div class="text-xs text-gray-500">${typeLabel}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
         
         this.suggestionsContainer.innerHTML = html;
         this.suggestionsContainer.classList.remove('hidden');
@@ -195,6 +209,52 @@ class SearchInterface {
                 this.selectSuggestion(this.suggestions[index]);
             });
         });
+    }
+    
+    /**
+     * Get appropriate icon for location type
+     * @param {string} type - Location type
+     * @returns {string} SVG path for icon
+     */
+    getLocationIcon(type) {
+        switch (type) {
+            case 'city':
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>';
+            case 'country':
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
+            case 'state':
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>';
+            case 'postal_code':
+            case 'zip':
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>';
+            case 'region':
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m0 0L9 7"></path>';
+            default:
+                return '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>';
+        }
+    }
+    
+    /**
+     * Get user-friendly label for location type
+     * @param {string} type - Location type
+     * @returns {string} Display label
+     */
+    getTypeLabel(type) {
+        switch (type) {
+            case 'city':
+                return 'City';
+            case 'country':
+                return 'Country';
+            case 'state':
+                return 'State/Province';
+            case 'postal_code':
+            case 'zip':
+                return 'Postal Code';
+            case 'region':
+                return 'Region';
+            default:
+                return 'Location';
+        }
     }
     
     /**

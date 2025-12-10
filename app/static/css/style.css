@@ -18,7 +18,25 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* Enhanced suggestion item styling */
+.suggestion-item:hover {
+    background-color: #f8fafc;
+}
+
+.suggestion-item.bg-blue-100 {
+    background-color: #dbeafe !important;
+}
+
+/* Ensure proper text truncation in suggestions */
+.suggestion-item .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Ensure proper responsive padding on mobile */
