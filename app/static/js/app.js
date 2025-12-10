@@ -415,7 +415,7 @@ class WeatherDisplay {
         // Individual elements
         this.weatherTitle = document.getElementById('weather-title');
         this.weatherLocation = document.getElementById('weather-location');
-        this.weatherImage = document.getElementById('weather-image');
+        this.mainWeatherIcon = document.getElementById('main-weather-icon');
         this.temperatureDisplay = document.getElementById('temperature-display');
         this.conditionsDisplay = document.getElementById('conditions-display');
         this.rainChanceDisplay = document.getElementById('rain-chance-display');
@@ -461,9 +461,8 @@ class WeatherDisplay {
         // Update location information
         this.weatherLocation.textContent = location.name;
         
-        // Update weather background image
-        const backgroundImage = this.getWeatherBackgroundImage(weather.conditions);
-        this.weatherImage.style.backgroundImage = `url("${backgroundImage}")`;
+        // Update main weather icon based on conditions and time
+        this.updateMainWeatherIcon(weather.conditions);
         
         // Update header weather icon based on conditions
         this.updateHeaderWeatherIcon(weather.conditions);
@@ -499,8 +498,9 @@ class WeatherDisplay {
         // Show the icon container
         headerIcon.classList.remove('hidden');
         
-        // Map weather conditions to OpenWeatherMap icon codes
-        const iconCode = this.getWeatherIconCode(conditions);
+        // Map weather conditions to OpenWeatherMap icon codes with time awareness
+        const isNight = this.isNightTime();
+        const iconCode = this.getWeatherIconCode(conditions, isNight);
         
         // Create img element for OpenWeatherMap icon
         const iconImg = document.createElement('img');
@@ -515,42 +515,77 @@ class WeatherDisplay {
     }
     
     /**
-     * Map weather conditions to OpenWeatherMap icon codes
+     * Map weather conditions to OpenWeatherMap icon codes with time awareness
      * @param {string} conditions - Weather conditions text
+     * @param {boolean} isNight - Whether it's currently night time
      * @returns {string} OpenWeatherMap icon code
      */
-    getWeatherIconCode(conditions) {
+    getWeatherIconCode(conditions, isNight = false) {
         const lower = conditions.toLowerCase();
+        const dayNightSuffix = isNight ? 'n' : 'd';
         
         // Map conditions to OpenWeatherMap icon codes
         if (lower.includes('thunderstorm') || lower.includes('storm')) {
-            return '11d'; // Thunderstorm
+            return '11d'; // Thunderstorm (same for day/night)
         } else if (lower.includes('drizzle')) {
-            return '09d'; // Shower rain
+            return '09d'; // Shower rain (same for day/night)
         } else if (lower.includes('rain') || lower.includes('shower')) {
             if (lower.includes('light')) {
-                return '10d'; // Light rain
+                return `10${dayNightSuffix}`; // Light rain
             } else if (lower.includes('heavy')) {
-                return '09d'; // Heavy rain
+                return '09d'; // Heavy rain (same for day/night)
             } else {
-                return '10d'; // Rain
+                return `10${dayNightSuffix}`; // Rain
             }
         } else if (lower.includes('snow') || lower.includes('flurr') || lower.includes('blizzard')) {
-            return '13d'; // Snow
+            return '13d'; // Snow (same for day/night)
         } else if (lower.includes('mist') || lower.includes('fog') || lower.includes('haze')) {
-            return '50d'; // Mist/Fog
+            return '50d'; // Mist/Fog (same for day/night)
         } else if (lower.includes('clear') || lower.includes('sunny')) {
-            return '01d'; // Clear sky
+            return `01${dayNightSuffix}`; // Clear sky
         } else if (lower.includes('few clouds')) {
-            return '02d'; // Few clouds
+            return `02${dayNightSuffix}`; // Few clouds
         } else if (lower.includes('scattered clouds')) {
-            return '03d'; // Scattered clouds
+            return `03${dayNightSuffix}`; // Scattered clouds
         } else if (lower.includes('broken clouds') || lower.includes('overcast') || lower.includes('cloudy')) {
-            return '04d'; // Broken clouds
+            return `04${dayNightSuffix}`; // Broken clouds
         } else {
             // Default to partly cloudy for unknown conditions
-            return '02d'; // Few clouds
+            return `02${dayNightSuffix}`; // Few clouds
         }
+    }
+    
+    /**
+     * Check if it's currently night time
+     * @returns {boolean} True if it's night time (6 PM to 6 AM)
+     */
+    isNightTime() {
+        const now = new Date();
+        const hour = now.getHours();
+        // Consider night time as 6 PM (18:00) to 6 AM (06:00)
+        return hour >= 18 || hour < 6;
+    }
+    
+    /**
+     * Update main weather icon using OpenWeatherMap icons with time awareness
+     * @param {string} conditions - Weather conditions text
+     */
+    updateMainWeatherIcon(conditions) {
+        if (!this.mainWeatherIcon) return;
+        
+        const isNight = this.isNightTime();
+        const iconCode = this.getWeatherIconCode(conditions, isNight);
+        
+        // Create img element for OpenWeatherMap icon
+        const iconImg = document.createElement('img');
+        iconImg.src = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
+        iconImg.alt = conditions;
+        iconImg.className = 'w-32 h-32 object-contain';
+        iconImg.title = conditions;
+        
+        // Replace content with the weather icon
+        this.mainWeatherIcon.innerHTML = '';
+        this.mainWeatherIcon.appendChild(iconImg);
     }
     
     /**
@@ -621,36 +656,7 @@ class WeatherDisplay {
         }
     }
     
-    /**
-     * Get weather background image based on conditions
-     * @param {string} conditions - Weather conditions text
-     * @returns {string} Image URL
-     */
-    getWeatherBackgroundImage(conditions) {
-        const lower = conditions.toLowerCase();
-        
-        // Default sunny/clear image
-        let imageUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuDmElNzdfzha9-u5B7plnFikM9co2ukEl39Hqrh3h6IfQACMY5h9WGXPsLGe5WI8mpgqFt-XWx2NIdDPt2fH8yps5mdcHUig9_pcfBANzwyncH-ySLOq_PG6uMMJlsQYxKdbe9uKfuO4agAOQTxjadUnG9C7XW0Cfb4rqWDbv7Onjr-Wjxngwz5pm8lc--58wL1zBFUXv9p15L41mL6nayb0RT_2m53nghqQk6n0k9yGWCDUCq497zZ2_spHFDE0Nf2tx7womNI0Ws";
-        
-        if (lower.includes('rain') || lower.includes('shower') || lower.includes('drizzle')) {
-            // Rainy weather image
-            imageUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuC2ty2pgiQ_4goDnKZW2befYjrlKtr4-IRxCQEsHGNknnixWkDEAWL7H7I4c9PT1Sh5Or714K1bY6YjFmpdXkAk1nFQyVEKxmW8riRrw6tlPZMMx1Q7OokB0OkZN9cU4sd6N2sC8u8uhsWTvgtRajwTfnAsnlHcAbyzD1k1obpM_v0gPJTtAdW40NE2Pe8j82RKn4ynFha2cFLuWhmFAM2QTu8fS6ptO5iN41dshxQqWP882Kh4BVotxeXWNgwR-JlIDFSqy15kTd4";
-        } else if (lower.includes('cloud') || lower.includes('overcast')) {
-            // Cloudy weather image
-            imageUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuBPg8TwFq9YLEZdHUDYIaZmlUoU2bE-F3zoI9yF-TW6aSv45ovgq2jfIJMjIxUAlaGefUJXAeH3DL5kHy0TqMz_PzXhhcPf9drF8DWjwHToRbk9Du24PWgBrQnTkJymkwDuFlbnfaF9bSI67Sy-lpi3PnxD3z4uVaxk4HRWJF1qjYN7U74Y44i3tukcTE_Y9KfSEv3zPFP6xbgSCFz6Ush4nofTZykwunuP7HbCC9qUhoG_xyDXsNuLZYXgy2yiko2JbEkxJ3xCg88";
-        } else if (lower.includes('storm') || lower.includes('thunder')) {
-            // Stormy weather image
-            imageUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuDnnEMvLkT-_2aKEjVUIfBo1rKv5wH2MfzSHjog3QI0F8hr9H_kInBEErm4UVeovz_GqdTq6A4ew58CEg5kGgs_w10CNBRwLAoFDX1imowtCsGLUMUnmOKpwz168qlTHwJFTDB5rLI8_Iu3weSjcyh-y_XtGA67vjyydzp8SVHbrX8tfUmWBCOtWt32dKKbOky-JivqAbbm7ktl0oHaMjJpLXvjGqaErP4SGjW5RD8x2IPakxQcDj_PdQEhLczh3HdXfalfpMnc-bA";
-        } else if (lower.includes('snow') || lower.includes('flurr') || lower.includes('blizzard')) {
-            // Snowy weather image
-            imageUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuBmlBmzPgOWNfjh2Jh8taS3IN3--MBZtpm8-9UZnwRoduNDBzL_R4tNAtAjIW-NWuaQON6mbh98WJgMcb_hQBYIRuHn_PWNB-am3FBybeJkjtZNIUJ8mvLNLuD0faqwYwfyg_tqx9ZmVnI6KN1dvDz3eEeEfxxSYCBMxJmDvi1xDLGZgDK7bXNpQC-41N72Tojjhslp5PwogOtOxdp4llBspJGMMNskfE2twmQOfIGoe8ZR5JhB2IyDnmRyUS2sGVl_1Jrm1WlH1v8";
-        } else if (lower.includes('fog') || lower.includes('mist') || lower.includes('haze')) {
-            // Foggy weather image
-            imageUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuAQelCFsR5J_9lrLXO7Mqe7fddidxDJ6Q4BPeNYplonOPtkAJ_4WnK4AJAoY_B2WXrshhznXfVcvXIf4sqyNUy-DTL1xSV-w5DdG_aDtcJYYBKS4POIG6IzLKQ8y_A0_OvQz8C2cSE22G1hg33Hm-SSmQUAC7FZvYeWJ7t9WDftGU6oy_HPPJx6q09soUluLTgM_OA1EFZTIuFHHSX1f7koODfDt1zrw8Johcj5WyO2U7ekRD_VLnFp2Oo2GyrBL55WLqmvW1Zeq-c";
-        }
-        
-        return imageUrl;
-    }
+
     
     /**
      * Display error message

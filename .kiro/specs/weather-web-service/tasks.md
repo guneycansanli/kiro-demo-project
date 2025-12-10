@@ -386,11 +386,14 @@
   - Focus appropriate search input
   - _Requirements: 1.1, 1.3_
 
-- [x] 11.10 Clean up default page state
+- [x] 11.10 Clean up default page state and implement time-aware weather icons
   - Remove default weather background image from page load
   - Replace loading text with minimal loading icon
   - Add clean welcome state for first-time users
   - Only show weather content after search or location use
+  - Replace weather background image frame with single weather icon
+  - Implement time-aware weather icons (day/night versions)
+  - Use OpenWeatherMap 4x resolution icons for main display
   - _Requirements: 1.1, 5.1, 5.4_
 
 - [ ] 11.11 Update frontend unit tests
