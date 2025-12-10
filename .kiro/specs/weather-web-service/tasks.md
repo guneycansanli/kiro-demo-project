@@ -299,114 +299,224 @@
 - [x] 9. Checkpoint - Ensure all backend tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [x] 10. Implement frontend HTML structure
+- [x] 10. Update frontend to match new design
   - _Requirements: 1.1, 1.2, 2.1, 3.1_
 
-- [x] 10.1 Create index.html template
-  - Set up HTML5 document structure
-  - Add meta tags for responsive design
-  - Create header with title
-  - Create search section with input field
-  - Create autocomplete suggestions container
-  - Create current location button
-  - Create weather display container
-  - Create error display container
-  - Link CSS and JavaScript files
+- [x] 10.1 Update index.html template with new design
+  - Implement Tailwind CSS-based design from main-2.html
+  - Add proper header with Weather App branding and navigation
+  - Create main search input with search icon
+  - Add settings button and user profile
+  - Create weather display section with image background
+  - Add temperature and metrics display cards
   - _Requirements: 1.1, 2.1, 3.1_
 
-- [x] 10.2 Create base CSS styles
-  - Set up CSS variables for colors and spacing
-  - Implement responsive grid layout
-  - Style header and title
-  - Style search section
-  - Create card-based layout for weather display
-  - Add mobile-first media queries
+- [x] 10.2 Update CSS to use Tailwind classes
+  - Replace custom CSS with Tailwind utility classes
+  - Implement responsive design using Tailwind breakpoints
+  - Style weather cards and metrics display
+  - Add proper spacing and typography
   - _Requirements: 1.2, 5.1, 5.4_
 
-- [x] 10.3 Create weather icons and visual indicators
-  - Add weather condition icons (sun, cloud, rain, etc.)
-  - Add metric icons (thermometer, droplet, wind)
-  - Style advisory banner with warning colors
+- [x] 10.3 Add weather condition backgrounds and visual indicators
+  - Implement dynamic weather background images
+  - Add weather metric icons and styling
+  - Style advisory banners with proper colors
   - _Requirements: 5.3_
 
-- [x] 11. Implement frontend JavaScript
+- [x] 11. Update frontend JavaScript for new design
   - _Requirements: 1.3, 2.2, 2.4, 3.2, 3.3, 3.4, 3.5_
 
-- [x] 11.1 Create SearchInterface class
-  - Implement constructor and DOM element references
-  - Implement input event handler with debouncing
-  - Implement showSuggestions() method
-  - Implement hideSuggestions() method
-  - Implement selectSuggestion() method
-  - Handle Enter key to submit search
+- [x] 11.1 Update SearchInterface class for new design
+  - Update DOM element selectors for new HTML structure
+  - Implement autocomplete dropdown with Tailwind styling
+  - Handle both header search and main search inputs
+  - Update suggestion display to match new design
   - _Requirements: 2.1, 2.2_
 
-- [x] 11.2 Implement autocomplete functionality
-  - Make API call to /api/autocomplete on input
-  - Debounce input to avoid excessive requests (300ms)
-  - Display suggestions in dropdown
-  - Handle keyboard navigation (up/down arrows)
-  - Handle click selection
+- [x] 11.2 Update autocomplete functionality
+  - Style autocomplete dropdown with Tailwind classes
+  - Position dropdown correctly under search input
+  - Handle keyboard navigation with new styling
+  - Update click selection handlers
   - _Requirements: 2.2, 2.3_
 
-- [x] 11.3 Create GeolocationHandler class
-  - Implement requestLocation() method
-  - Handle geolocation success callback
-  - Handle geolocation error callback
-  - Display loading state during geolocation
+- [x] 11.3 Update GeolocationHandler class
+  - Integrate with new UI design
+  - Update loading states to use Tailwind styling
+  - Handle geolocation in context of new layout
   - _Requirements: 3.2, 3.3, 3.4_
 
-- [x] 11.4 Implement current location button handler
-  - Add click event listener
-  - Request geolocation permission
-  - Fetch weather by coordinates on success
-  - Display error message on failure
+- [x] 11.4 Add current location functionality to new design
+  - Add current location button to the interface
+  - Style button with Tailwind classes
+  - Integrate with existing geolocation handler
   - _Requirements: 3.1, 3.2, 3.4_
 
-- [x] 11.5 Create WeatherDisplay class
-  - Implement showLoading() method
-  - Implement showWeather() method
-  - Implement showError() method
-  - Implement showAdvisory() method
+- [x] 11.5 Update WeatherDisplay class for new design
+  - Update weather display to match new card layout
+  - Implement dynamic background image updates
+  - Style temperature display with large font
+  - Update metrics display in grid format
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 6.2_
 
-- [x] 11.6 Implement weather data display
-  - Create weather card HTML structure
-  - Display location name
-  - Display temperature in F and C
-  - Display conditions with icon
-  - Display rain chance, humidity, wind speed with icons
-  - Display advisory banner if present
-  - Display "No active advisories" message if none
+- [x] 11.6 Implement new weather data display format
+  - Display location name in header format
+  - Show temperature in large card format
+  - Display metrics in grid layout with proper styling
+  - Add weather condition background images
+  - Style advisory display if present
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 5.2, 5.3, 6.2, 6.5_
 
-- [x] 11.7 Implement API client functions
-  - Create fetchWeather(location) function
-  - Create fetchWeatherByCoordinates(lat, lon) function
-  - Create fetchAutocomplete(query) function
-  - Handle fetch errors and network issues
-  - Parse JSON responses
+- [x] 11.7 Update API client functions
+  - Ensure compatibility with new UI
+  - Update error handling for new design
+  - Maintain existing fetch functionality
   - _Requirements: 2.4, 3.3, 9.2_
 
-- [x] 11.8 Implement error handling and display
-  - Display network errors
-  - Display parsing errors
-  - Display location not found errors
-  - Add retry button for failed requests
+- [x] 11.8 Update error handling and display for new design
+  - Style error messages with Tailwind classes
+  - Position error display appropriately
+  - Update retry functionality
   - _Requirements: 7.1, 7.2, 7.3, 7.5_
 
-- [x] 11.9 Initialize application on page load
-  - Set up event listeners
-  - Initialize components
-  - Focus search input
+- [x] 11.9 Update application initialization
+  - Initialize with new DOM structure
+  - Set up event listeners for new elements
+  - Focus appropriate search input
   - _Requirements: 1.1, 1.3_
 
-- [x] 11.10 Write frontend unit tests
-  - Test SearchInterface component
-  - Test GeolocationHandler component
-  - Test WeatherDisplay component
-  - Test API client functions
+- [ ] 11.10 Update frontend unit tests
+  - Update tests for new DOM structure
+  - Test new styling and layout
+  - Ensure all functionality works with new design
   - _Requirements: 2.2, 3.2, 4.1_
+
+- [x] 17. Fix project file structure and organization
+  - _Requirements: 8.1, 9.5_
+
+- [x] 17.1 Clean up root directory files
+  - Remove or relocate main.html and main-2.html files
+  - Organize development files properly
+  - Clean up any unused configuration files
+  - _Requirements: 8.1_
+
+- [x] 17.2 Organize static assets properly
+  - Ensure all CSS, JS, and image files are in correct locations
+  - Verify proper asset linking in templates
+  - Add any missing static files or directories
+  - _Requirements: 1.1, 1.2_
+
+- [x] 17.3 Update documentation structure
+  - Ensure README files are up to date with new design
+  - Update API documentation if needed
+  - Verify Docker documentation matches current setup
+  - _Requirements: 9.5_
+
+- [x] 17.4 Verify project dependencies and requirements
+  - Check that all Python dependencies are listed correctly
+  - Ensure frontend dependencies (Tailwind CSS) are properly configured
+  - Update requirements files if needed
+  - _Requirements: 8.1, 8.5_
+
+- [x] 18. Implement navigation tabs functionality
+  - _Requirements: 1.1, 1.3, 9.1_
+
+- [x] 18.1 Add Today tab functionality
+  - Implement current weather view (already exists)
+  - Add hourly forecast for today
+  - Show detailed current conditions
+  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
+
+- [x] 18.2 Implement Forecast tab
+  - Create 7-day weather forecast view
+  - Add daily weather cards with high/low temperatures
+  - Show weather icons for each day
+  - Include precipitation probability and conditions
+  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
+
+- [x] 18.3 Add Maps tab functionality
+  - Implement interactive weather map
+  - Show temperature overlay
+  - Add precipitation radar
+  - Include zoom and pan functionality
+  - _Requirements: 1.1, 3.3, 5.3_
+
+- [x] 18.4 Create News tab
+  - Add weather news feed
+  - Show weather alerts and warnings
+  - Include severe weather notifications
+  - Add local weather news if available
+  - _Requirements: 6.1, 6.2, 6.3_
+
+- [x] 18.5 Implement tab navigation system
+  - Add active tab highlighting
+  - Handle tab switching with JavaScript
+  - Maintain state between tab switches
+  - Add smooth transitions between views
+  - _Requirements: 1.3_
+
+- [ ] 19. Enhance weather data and features
+  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
+
+- [ ] 19.1 Add extended weather metrics
+  - Include UV index
+  - Add visibility information
+  - Show barometric pressure
+  - Include sunrise/sunset times
+  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
+
+- [ ] 19.2 Implement weather alerts system
+  - Create alert notification system
+  - Add push notifications for severe weather
+  - Include alert severity levels
+  - Show alert details and recommendations
+  - _Requirements: 6.1, 6.2, 6.3, 6.4_
+
+- [ ] 19.3 Add location favorites
+  - Allow users to save favorite locations
+  - Quick access to saved locations
+  - Manage favorites list
+  - Store favorites in local storage
+  - _Requirements: 2.1, 2.4_
+
+- [ ] 19.4 Implement weather history
+  - Show recent search history
+  - Display weather trends
+  - Add comparison with previous days
+  - Include weather statistics
+  - _Requirements: 4.1, 10.3_
+
+- [ ] 20. Add interactive features
+  - _Requirements: 1.3, 5.1, 5.4_
+
+- [ ] 20.1 Implement dark/light theme toggle
+  - Add theme switcher in settings
+  - Store theme preference
+  - Apply theme to all components
+  - Ensure accessibility compliance
+  - _Requirements: 5.1, 5.4_
+
+- [ ] 20.2 Add weather sharing functionality
+  - Share weather information via social media
+  - Generate weather summary cards
+  - Include location and current conditions
+  - Add copy to clipboard functionality
+  - _Requirements: 1.3_
+
+- [ ] 20.3 Implement weather widgets
+  - Create embeddable weather widgets
+  - Add different widget sizes
+  - Include customization options
+  - Provide widget code generation
+  - _Requirements: 1.1, 5.1_
+
+- [ ] 20.4 Add voice search functionality
+  - Implement speech recognition for location search
+  - Add voice commands for weather queries
+  - Include text-to-speech for weather reading
+  - Ensure cross-browser compatibility
+  - _Requirements: 2.1, 2.2_
 
 - [x] 12. Implement Docker configuration
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_

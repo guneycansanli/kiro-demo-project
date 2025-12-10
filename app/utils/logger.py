@@ -31,9 +31,13 @@ class JSONFormatter(logging.Formatter):
             'message': record.getMessage(),
         }
         
-        # Add request ID if available
-        if hasattr(g, 'request_id'):
-            log_entry['request_id'] = g.request_id
+        # Add request ID if available (only when in Flask app context)
+        try:
+            if hasattr(g, 'request_id'):
+                log_entry['request_id'] = g.request_id
+        except RuntimeError:
+            # Outside of application context, skip request ID
+            pass
         
         # Add extra fields from record
         if hasattr(record, 'request_id'):

@@ -3,23 +3,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Service</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Weather App</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Weather Service</h1>
-        </header>
-        
-        <div class="search-section">
-            <input type="text" id="search-input" placeholder="Enter zip code, city, or country">
-            <div id="autocomplete-suggestions"></div>
-            <button id="current-location-btn">Use Current Location</button>
+    <div class="relative flex h-auto min-h-screen w-full flex-col bg-white group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+        <div class="layout-container flex h-full grow flex-col">
+            <!-- Header -->
+            <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f2f4] px-10 py-3">
+                <div class="flex items-center gap-8">
+                    <div class="flex items-center gap-4 text-[#111418]">
+                        <div class="size-4">
+                            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M13.8261 30.5736C16.7203 29.8826 20.2244 29.4783 24 29.4783C27.7756 29.4783 31.2797 29.8826 34.1739 30.5736C36.9144 31.2278 39.9967 32.7669 41.3563 33.8352L24.8486 7.36089C24.4571 6.73303 23.5429 6.73303 23.1514 7.36089L6.64374 33.8352C8.00331 32.7669 11.0856 31.2278 13.8261 30.5736Z"
+                                    fill="currentColor"
+                                ></path>
+                                <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M39.998 35.764C39.9944 35.7463 39.9875 35.7155 39.9748 35.6706C39.9436 35.5601 39.8949 35.4259 39.8346 35.2825C39.8168 35.2403 39.7989 35.1993 39.7813 35.1602C38.5103 34.2887 35.9788 33.0607 33.7095 32.5189C30.9875 31.8691 27.6413 31.4783 24 31.4783C20.3587 31.4783 17.0125 31.8691 14.2905 32.5189C12.0012 33.0654 9.44505 34.3104 8.18538 35.1832C8.17384 35.2075 8.16216 35.233 8.15052 35.2592C8.09919 35.3751 8.05721 35.4886 8.02977 35.589C8.00356 35.6848 8.00039 35.7333 8.00004 35.7388C8.00004 35.739 8 35.7393 8.00004 35.7388C8.00004 35.7641 8.0104 36.0767 8.68485 36.6314C9.34546 37.1746 10.4222 37.7531 11.9291 38.2772C14.9242 39.319 19.1919 40 24 40C28.8081 40 33.0758 39.319 36.0709 38.2772C37.5778 37.7531 38.6545 37.1746 39.3151 36.6314C39.9006 36.1499 39.9857 35.8511 39.998 35.764ZM4.95178 32.7688L21.4543 6.30267C22.6288 4.4191 25.3712 4.41909 26.5457 6.30267L43.0534 32.777C43.0709 32.8052 43.0878 32.8338 43.104 32.8629L41.3563 33.8352C43.104 32.8629 43.1038 32.8626 43.104 32.8629L43.1051 32.865L43.1065 32.8675L43.1101 32.8739L43.1199 32.8918C43.1276 32.906 43.1377 32.9246 43.1497 32.9473C43.1738 32.9925 43.2062 33.0545 43.244 33.1299C43.319 33.2792 43.4196 33.489 43.5217 33.7317C43.6901 34.1321 44 34.9311 44 35.7391C44 37.4427 43.003 38.7775 41.8558 39.7209C40.6947 40.6757 39.1354 41.4464 37.385 42.0552C33.8654 43.2794 29.133 44 24 44C18.867 44 14.1346 43.2794 10.615 42.0552C8.86463 41.4464 7.30529 40.6757 6.14419 39.7209C4.99695 38.7775 3.99999 37.4427 3.99999 35.7391C3.99999 34.8725 4.29264 34.0922 4.49321 33.6393C4.60375 33.3898 4.71348 33.1804 4.79687 33.0311C4.83898 32.9556 4.87547 32.8935 4.9035 32.8471C4.91754 32.8238 4.92954 32.8043 4.93916 32.7889L4.94662 32.777L4.95178 32.7688ZM35.9868 29.004L24 9.77997L12.0131 29.004C12.4661 28.8609 12.9179 28.7342 13.3617 28.6282C16.4281 27.8961 20.0901 27.4783 24 27.4783C27.9099 27.4783 31.5719 27.8961 34.6383 28.6282C35.082 28.7342 35.5339 28.8609 35.9868 29.004Z"
+                                    fill="currentColor"
+                                ></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]">Weather App</h2>
+                    </div>
+                    <!-- Navigation Tabs -->
+                    <div class="flex items-center gap-9">
+                        <button id="tab-today" class="nav-tab active text-[#111418] text-sm font-medium leading-normal border-b-2 border-blue-500 pb-1" data-tab="today">Today</button>
+                        <button id="tab-forecast" class="nav-tab text-[#637588] text-sm font-medium leading-normal hover:text-[#111418] pb-1" data-tab="forecast">Forecast</button>
+                        <button id="tab-maps" class="nav-tab text-[#637588] text-sm font-medium leading-normal hover:text-[#111418] pb-1" data-tab="maps">Maps</button>
+                        <button id="tab-news" class="nav-tab text-[#637588] text-sm font-medium leading-normal hover:text-[#111418] pb-1" data-tab="news">News</button>
+                    </div>
+                </div>
+                <div class="flex flex-1 justify-end gap-8">
+                    <!-- Header Search -->
+                    <label class="flex flex-col min-w-40 !h-10 max-w-64">
+                        <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+                            <div
+                                class="text-[#637588] flex border-none bg-[#f0f2f4] items-center justify-center pl-4 rounded-l-lg border-r-0"
+                                data-icon="MagnifyingGlass"
+                                data-size="24px"
+                                data-weight="regular"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                    <path
+                                        d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                                    ></path>
+                                </svg>
+                            </div>
+                            <input
+                                id="header-search-input"
+                                placeholder="Search"
+                                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111418] focus:outline-0 focus:ring-0 border-none bg-[#f0f2f4] focus:border-none h-full placeholder:text-[#637588] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                                value=""
+                            />
+                        </div>
+                    </label>
+                    <!-- Settings Button -->
+                    <button
+                        id="settings-btn"
+                        class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-[#f0f2f4] text-[#111418] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+                    >
+                        <div class="text-[#111418]" data-icon="Gear" data-size="20px" data-weight="regular">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                                <path
+                                    d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"
+                                ></path>
+                            </svg>
+                        </div>
+                    </button>
+                    <!-- User Profile -->
+                    <div
+                        class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 cursor-pointer"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBVlF-UrTW8HAMX2sX27y5K_sGfQ1Z4mZ9TRoiVrbpvjtUTfqu3Ea7gFuHnnDReOLim5-0oLK0Fyfd7wC8Ajq_jXC1WU_Vx3qxR1JVc-_6KRmMsYOmzgjPZSmkfpTRrSLpKrLWAW2_yvKwCsqL4zFvGBwJnKTSvFYraaJ8rM0EHWLruoqbrtxsrAQfnIZexdh_IWR6sb5BUpDrfz94AAcWV36AT8cA9XCm9AvNnOM5Oz9fjZ_wuLL9S8SSSA5HRMdBF4a5OjUZNKVI");'
+                    ></div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <div class="px-40 flex flex-1 justify-center py-5">
+                <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+                    <!-- Main Search -->
+                    <div class="px-4 py-3">
+                        <label class="flex flex-col min-w-40 h-12 w-full">
+                            <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+                                <div
+                                    class="text-[#637588] flex border-none bg-[#f0f2f4] items-center justify-center pl-4 rounded-l-lg border-r-0"
+                                    data-icon="MagnifyingGlass"
+                                    data-size="24px"
+                                    data-weight="regular"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                        <path
+                                            d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                                        ></path>
+                                    </svg>
+                                </div>
+                                <input
+                                    id="search-input"
+                                    placeholder="Enter zip code, city, or country"
+                                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111418] focus:outline-0 focus:ring-0 border-none bg-[#f0f2f4] focus:border-none h-full placeholder:text-[#637588] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                                    value=""
+                                />
+                            </div>
+                        </label>
+                        <!-- Autocomplete Suggestions -->
+                        <div id="autocomplete-suggestions" class="hidden mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto z-10"></div>
+                    </div>
+
+                    <!-- Current Location Button -->
+                    <div class="px-4 pb-4">
+                        <button
+                            id="current-location-btn"
+                            class="flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M128,64a64,64,0,1,0,64,64A64.07,64.07,0,0,0,128,64Zm0,112a48,48,0,1,1,48-48A48.05,48.05,0,0,1,128,176ZM173.66,90.34a8,8,0,0,1,11.31-11.31l16,16a8,8,0,0,1-11.31,11.31ZM72,128a8,8,0,0,1-8,8H48a8,8,0,0,1,0-16H64A8,8,0,0,1,72,128Zm-17.66,37.66a8,8,0,0,1,11.31,11.31l-16,16a8,8,0,0,1-11.31-11.31Zm0-75.32-16-16a8,8,0,0,1,11.31-11.31l16,16a8,8,0,0,1-11.31,11.31ZM128,72V48a8,8,0,0,1,16,0V64a8,8,0,0,1-16,8Zm0,112a8,8,0,0,1,16,0v16a8,8,0,0,1-16,0Zm45.66-17.66a8,8,0,0,1,11.31,11.31l-16,16a8,8,0,0,1-11.31-11.31ZM192,128a8,8,0,0,1,8-8h16a8,8,0,0,1,0,16H200A8,8,0,0,1,192,128Z"/>
+                            </svg>
+                            Use Current Location
+                        </button>
+                    </div>
+
+                    <div class="w-full" style="height: 20px;"></div>
+
+                    <!-- Weather Display -->
+                    <div id="weather-display" class="hidden">
+                        <!-- Location Header -->
+                        <h2 id="weather-title" class="text-[#111418] tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">Current Weather</h2>
+                        <p id="weather-location" class="text-[#111418] text-base font-normal leading-normal pb-3 pt-1 px-4 text-center">Loading...</p>
+                        
+                        <!-- Weather Background Image -->
+                        <div class="flex w-full grow bg-white @container p-4">
+                            <div id="weather-background" class="w-full gap-1 overflow-hidden bg-white @[480px]:gap-2 aspect-[3/2] rounded-lg flex">
+                                <div
+                                    id="weather-image"
+                                    class="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none flex-1"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDmElNzdfzha9-u5B7plnFikM9co2ukEl39Hqrh3h6IfQACMY5h9WGXPsLGe5WI8mpgqFt-XWx2NIdDPt2fH8yps5mdcHUig9_pcfBANzwyncH-ySLOq_PG6uMMJlsQYxKdbe9uKfuO4agAOQTxjadUnG9C7XW0Cfb4rqWDbv7Onjr-Wjxngwz5pm8lc--58wL1zBFUXv9p15L41mL6nayb0RT_2m53nghqQk6n0k9yGWCDUCq497zZ2_spHFDE0Nf2tx7womNI0Ws");'
+                                ></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Temperature Card -->
+                        <div class="flex flex-wrap gap-4 p-4">
+                            <div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-lg p-6 bg-[#f0f2f4]">
+                                <p class="text-[#111418] text-base font-medium leading-normal">Temperature</p>
+                                <p id="temperature-display" class="text-[#111418] tracking-light text-2xl font-bold leading-tight">--°F</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Weather Metrics -->
+                        <div class="p-4 grid grid-cols-[20%_1fr] gap-x-6">
+                            <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#dce0e5] py-5">
+                                <p class="text-[#637588] text-sm font-normal leading-normal">Conditions</p>
+                                <p id="conditions-display" class="text-[#111418] text-sm font-normal leading-normal">--</p>
+                            </div>
+                            <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#dce0e5] py-5">
+                                <p class="text-[#637588] text-sm font-normal leading-normal">Rain Chance</p>
+                                <p id="rain-chance-display" class="text-[#111418] text-sm font-normal leading-normal">--%</p>
+                            </div>
+                            <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#dce0e5] py-5">
+                                <p class="text-[#637588] text-sm font-normal leading-normal">Humidity</p>
+                                <p id="humidity-display" class="text-[#111418] text-sm font-normal leading-normal">--%</p>
+                            </div>
+                            <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#dce0e5] py-5">
+                                <p class="text-[#637588] text-sm font-normal leading-normal">Wind Speed</p>
+                                <p id="wind-speed-display" class="text-[#111418] text-sm font-normal leading-normal">-- mph</p>
+                            </div>
+                        </div>
+
+                        <!-- Advisory Display -->
+                        <div id="advisory-display" class="hidden p-4">
+                            <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 id="advisory-type" class="text-sm font-medium text-yellow-800">Weather Advisory</h3>
+                                        <p id="advisory-description" class="mt-1 text-sm text-yellow-700">Advisory details will appear here.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Error Display -->
+                    <div id="error-display" class="hidden p-4">
+                        <div class="bg-red-100 border-l-4 border-red-500 p-4 rounded">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-medium text-red-800">Error</h3>
+                                    <p id="error-message" class="mt-1 text-sm text-red-700">An error occurred.</p>
+                                    <button id="retry-btn" class="mt-2 text-sm text-red-800 underline hover:text-red-600">Try Again</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading Display -->
+                    <div id="loading-display" class="hidden p-4 text-center">
+                        <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-gray-500 bg-white transition ease-in-out duration-150">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Loading weather data...
+                        </div>
+                    </div>
+
+                    <!-- Forecast Tab Content -->
+                    <div id="forecast-content" class="hidden">
+                        <h2 class="text-[#111418] tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">7-Day Forecast</h2>
+                        <div id="forecast-location-display" class="text-center text-gray-600 mb-4">
+                            <p>Search for a location to see the 7-day forecast</p>
+                        </div>
+                        <div id="forecast-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
+                            <!-- Forecast cards will be populated by JavaScript -->
+                            <div id="forecast-placeholder" class="col-span-full text-center p-8 bg-gray-50 rounded-lg">
+                                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <p class="text-gray-500">7-day weather forecast will appear here</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Maps Tab Content -->
+                    <div id="maps-content" class="hidden">
+                        <h2 class="text-[#111418] tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">Weather Maps</h2>
+                        <div id="maps-location-display" class="text-center text-gray-600 mb-4">
+                            <p>Search for a location to view weather maps</p>
+                        </div>
+                        <div class="p-4">
+                            <!-- Map Controls -->
+                            <div class="mb-4 flex flex-wrap gap-2 justify-center">
+                                <button id="map-temp" class="map-layer-btn active px-4 py-2 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-colors">Temperature</button>
+                                <button id="map-precipitation" class="map-layer-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300 transition-colors">Precipitation</button>
+                                <button id="map-wind" class="map-layer-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300 transition-colors">Wind</button>
+                                <button id="map-satellite" class="map-layer-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300 transition-colors">Satellite</button>
+                            </div>
+                            
+                            <!-- Map Container -->
+                            <div id="weather-map-container" class="bg-gray-100 rounded-lg overflow-hidden" style="height: 400px;">
+                                <div id="weather-map" class="w-full h-full relative">
+                                    <!-- Default map placeholder -->
+                                    <div id="map-placeholder" class="flex items-center justify-center h-full">
+                                        <div class="text-center">
+                                            <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m0 0L9 7"></path>
+                                            </svg>
+                                            <p class="text-gray-500">Interactive weather map will appear here</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Map will be loaded here -->
+                                    <iframe id="map-iframe" class="w-full h-full hidden" frameborder="0" scrolling="no"></iframe>
+                                </div>
+                            </div>
+                            
+                            <!-- Map Legend -->
+                            <div id="map-legend" class="mt-4 p-4 bg-white rounded-lg border border-gray-200">
+                                <h4 class="font-medium text-gray-900 mb-2">Map Legend</h4>
+                                <div id="legend-content" class="text-sm text-gray-600">
+                                    <div class="temperature-legend">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="flex items-center space-x-1">
+                                                <div class="w-4 h-4 bg-blue-500 rounded"></div>
+                                                <span>Cold</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <div class="w-4 h-4 bg-green-500 rounded"></div>
+                                                <span>Mild</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <div class="w-4 h-4 bg-yellow-500 rounded"></div>
+                                                <span>Warm</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <div class="w-4 h-4 bg-red-500 rounded"></div>
+                                                <span>Hot</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- News Tab Content -->
+                    <div id="news-content" class="hidden">
+                        <h2 class="text-[#111418] tracking-light text-[28px] font-bold leading-tight px-4 text-center pb-3 pt-5">Weather News & Alerts</h2>
+                        <div id="news-location-display" class="text-center text-gray-600 mb-4">
+                            <p>Search for a location to view local weather news and alerts</p>
+                        </div>
+                        <div class="p-4">
+                            <!-- News Categories -->
+                            <div class="mb-6 flex flex-wrap gap-2 justify-center">
+                                <button id="news-alerts" class="news-category-btn active px-4 py-2 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600 transition-colors">Alerts</button>
+                                <button id="news-local" class="news-category-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300 transition-colors">Local News</button>
+                                <button id="news-climate" class="news-category-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300 transition-colors">Climate</button>
+                                <button id="news-safety" class="news-category-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300 transition-colors">Safety Tips</button>
+                            </div>
+                            
+                            <!-- News Content -->
+                            <div id="news-articles" class="space-y-4">
+                                <!-- Default placeholder -->
+                                <div id="news-placeholder" class="text-center p-8 bg-gray-50 rounded-lg">
+                                    <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                                    </svg>
+                                    <p class="text-gray-500">Weather news and alerts will appear here</p>
+                                </div>
+                                
+                                <!-- News articles will be populated by JavaScript -->
+                            </div>
+                            
+                            <!-- Loading state for news -->
+                            <div id="news-loading" class="hidden text-center p-8">
+                                <div class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-gray-500 bg-white transition ease-in-out duration-150">
+                                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Loading weather news...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div id="weather-display"></div>
-        <div id="error-display"></div>
     </div>
     
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
