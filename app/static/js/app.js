@@ -463,6 +463,9 @@ class WeatherDisplay {
         const backgroundImage = this.getWeatherBackgroundImage(weather.conditions);
         this.weatherImage.style.backgroundImage = `url("${backgroundImage}")`;
         
+        // Update header weather icon based on conditions
+        this.updateHeaderWeatherIcon(weather.conditions);
+        
         // Update temperature (show both F and C)
         this.temperatureDisplay.textContent = `${weather.temp_f}°F (${weather.temp_c}°C)`;
         
@@ -481,6 +484,64 @@ class WeatherDisplay {
         
         // Show the weather display
         this.displayContainer.classList.remove('hidden');
+    }
+    
+    /**
+     * Update header weather icon based on weather conditions
+     * @param {string} conditions - Weather conditions text
+     */
+    updateHeaderWeatherIcon(conditions) {
+        const headerIcon = document.getElementById('header-weather-icon');
+        if (!headerIcon) return;
+        
+        const lower = conditions.toLowerCase();
+        let iconSvg = '';
+        
+        if (lower.includes('rain') || lower.includes('shower') || lower.includes('drizzle')) {
+            // Rain icon
+            iconSvg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M96,20a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,20ZM24,104H232a8,8,0,0,1,0,16H24a8,8,0,0,1,0-16Zm128,88a12,12,0,1,1-12-12A12,12,0,0,1,152,192ZM64,172a12,12,0,1,0,12,12A12,12,0,0,0,64,172Zm128,0a12,12,0,1,0,12,12A12,12,0,0,0,192,172ZM88,212a12,12,0,1,0,12,12A12,12,0,0,0,88,212Zm80,0a12,12,0,1,0,12,12A12,12,0,0,0,168,212ZM128,132a12,12,0,1,0,12,12A12,12,0,0,0,128,132Z"/>
+                </svg>
+            `;
+        } else if (lower.includes('cloud') || lower.includes('overcast')) {
+            // Cloudy icon
+            iconSvg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M160,40A88.09,88.09,0,0,0,81.29,88.67,64,64,0,0,0,72,216h88a88,88,0,0,0,0-176ZM160,200H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.11A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,72,72Z"/>
+                </svg>
+            `;
+        } else if (lower.includes('storm') || lower.includes('thunder')) {
+            // Storm icon
+            iconSvg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M96,20a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,20ZM24,104H232a8,8,0,0,1,0,16H24a8,8,0,0,1,0-16Zm109.66,58.34L112,184l21.66,21.66a8,8,0,0,1-11.32,11.32L96,190.64,69.66,217a8,8,0,0,1-11.32-11.32L80,184,58.34,162.34a8,8,0,0,1,11.32-11.32L96,177.36l26.34-26.34a8,8,0,0,1,11.32,11.32ZM208,162.34,186.34,184,208,205.66a8,8,0,0,1-11.32,11.32L170.34,190.64,144,217a8,8,0,0,1-11.32-11.32L154.34,184l-21.66-21.66a8,8,0,0,1,11.32-11.32L170.34,177.36l26.34-26.34a8,8,0,0,1,11.32,11.32Z"/>
+                </svg>
+            `;
+        } else if (lower.includes('snow') || lower.includes('flurr') || lower.includes('blizzard')) {
+            // Snow icon
+            iconSvg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M128,20a8,8,0,0,1,8,8V60.69l18.34-18.35a8,8,0,0,1,11.32,11.32L146.83,72.49l18.83,18.83a8,8,0,0,1-11.32,11.32L136,84.31V128a8,8,0,0,1-16,0V84.31L101.66,102.64a8,8,0,0,1-11.32-11.32L109.17,72.49,90.34,53.66A8,8,0,0,1,101.66,42.34L120,60.69V28A8,8,0,0,1,128,20ZM60.69,120H28a8,8,0,0,0,0,16H60.69L42.34,154.34a8,8,0,0,0,11.32,11.32L72.49,146.83l18.83,18.83a8,8,0,0,0,11.32-11.32L84.31,136H128a8,8,0,0,0,0-16H84.31l18.33-18.34a8,8,0,0,0-11.32-11.32L72.49,109.17,53.66,90.34A8,8,0,0,0,42.34,101.66L60.69,120ZM228,120H195.31l18.35-18.34a8,8,0,0,0-11.32-11.32L183.51,109.17l-18.83-18.83a8,8,0,0,0-11.32,11.32L171.69,120H128a8,8,0,0,0,0,16h43.69l-18.33,18.34a8,8,0,0,0,11.32,11.32l18.83-18.83,18.83,18.83a8,8,0,0,0,11.32-11.32L195.31,136H228a8,8,0,0,0,0-16ZM146.83,183.51l18.83-18.83a8,8,0,0,0-11.32-11.32L136,171.69V128a8,8,0,0,0-16,0v43.69l-18.34-18.33a8,8,0,0,0-11.32,11.32l18.83,18.83L90.34,202.34a8,8,0,0,0,11.32,11.32L120,195.31V228a8,8,0,0,0,16,0V195.31l18.34,18.35a8,8,0,0,0,11.32-11.32Z"/>
+                </svg>
+            `;
+        } else if (lower.includes('fog') || lower.includes('mist') || lower.includes('haze')) {
+            // Fog icon
+            iconSvg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M24,144H232a8,8,0,0,1,0,16H24a8,8,0,0,1,0-16Zm0,32H184a8,8,0,0,1,0,16H24a8,8,0,0,1,0-16Zm0,32H136a8,8,0,0,1,0,16H24a8,8,0,0,1,0-16ZM160,40A88.09,88.09,0,0,0,81.29,88.67,64,64,0,0,0,72,216h16a8,8,0,0,0,0-16H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.11A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,72,72H136a8,8,0,0,0,0,16h24a88,88,0,0,0,0-176Z"/>
+                </svg>
+            `;
+        } else {
+            // Default sunny icon
+            iconSvg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,1,69.66,58.34l16,16a8,8,0,0,1-11.32,11.32Zm0,116.68-16,16a8,8,0,0,1-11.32-11.32l16-16a8,8,0,0,1,11.32,11.32ZM192,72a8,8,0,0,1,5.66-2.34l16-16a8,8,0,0,1,11.32,11.32l-16,16A8,8,0,0,1,192,72Zm5.66,114.34a8,8,0,0,1-11.32,11.32l-16-16a8,8,0,0,1,11.32-11.32ZM48,128a8,8,0,0,1-8-8H16a8,8,0,0,1,0-16H40A8,8,0,0,1,48,128Zm80,80a8,8,0,0,1-8,8V240a8,8,0,0,1,0-16V208A8,8,0,0,1,128,208Zm112-88a8,8,0,0,1-8,8H216a8,8,0,0,1,0-16h16A8,8,0,0,1,240,120Z"/>
+                </svg>
+            `;
+        }
+        
+        headerIcon.innerHTML = iconSvg;
     }
     
     /**
